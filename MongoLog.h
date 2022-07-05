@@ -19,20 +19,14 @@ public:
         collection_ = db_.collection(collection);
         auto wt_con = collection_.write_concern();
 
-        wt_con.acknowledge_level(mongocxx::write_concern::level::k_unacknowledged); // 不返回事务信息
+        //wt_con.acknowledge_level(mongocxx::write_concern::level::k_unacknowledged); // 不返回事务信息
         wt_con.journal(false);  // 允许数据库预提交
         collection_.write_concern(wt_con);
     }
 
     virtual ~MongoLog() = default;
 
-    auto append() {
-        bsoncxx::document::view_or_value doc = make_document(
-                kvp("time", 35345),
-                kvp("volt", 432),
-                kvp("cur", 345)
-        );
-
+    auto append(const bsoncxx::document::view_or_value &doc) {
         return collection_.insert_one(doc);
     }
 
@@ -40,7 +34,7 @@ public:
         collection_.drop();
     }
 
-    auto appendMany(const std::vector<bsoncxx::document::value> &docs) {
+    stdx::optional<result::insert_many> appendMany(const std::vector<bsoncxx::document::value> &docs) {
         mongocxx::options::insert op;
         op.ordered(true);
 

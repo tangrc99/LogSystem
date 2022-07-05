@@ -1,0 +1,11 @@
+{
+  "work_dir": "./",
+  "max_send_batch": 300,
+  "log_format": "123 123 123 123123123123",
+  "arena_block_size": 4096,
+  "mongo": {
+    "uri": "mongodb://localhost:27017",
+    "collection" : "Heater",
+    "verify": true
+  }
+}

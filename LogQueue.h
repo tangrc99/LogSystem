@@ -14,29 +14,13 @@
 #include <chrono>
 #include <iostream>
 #include "LockFreeQueue.h"
+#include "Slice.h"
+
 
 
 // 目前是 0.5 us 一条 log ？？
 
-struct LogInformation {
-    std::string content_ = "123 123 123 123123123123";
-    std::string content_1;
-    std::string content_2;
-    std::string content_3;
-    std::string content_4;
-
-    explicit LogInformation(std::string content) : content_(std::move(content)) {}
-
-//    explicit LogInformation(const std::string &content_1, const std::string &content_2, const std::string &content_3,
-//                            const std::string &content_4) : content_(content_1 + " "+ content_2 + " "+content_3 +" "+ content_4) {}
-    explicit LogInformation(std::string content_1, std::string content_2, std::string content_3,
-                            std::string content_4) : content_1(std::move(content_1)), content_2(std::move(content_2)),
-                                                               content_3(std::move(content_3)),
-                                                               content_4(std::move(content_4)) {}
-
-   LogInformation() : content_("123 123 123 123123123123") {}
-
-};
+struct LogInformation ;
 
 using LogBatch = std::list<LogInformation>;
 using LogBatchPtr = std::shared_ptr<std::list<LogInformation>>;
@@ -49,14 +33,24 @@ public:
     // 将一条 log 添加到队列中
     void append();
 
+    void append(Slice &slice);
+
+    void start();
+
     explicit LogQueue(const std::string &file, LogBatchQueuePtr queue = nullptr);
 
     ~LogQueue();
+
+    LogQueue(const LogQueue &other) = delete;
+
+    LogQueue &operator=(const LogQueue &other) = delete;
 
 private:
     bool flush();
 
     void LoopFlush();
+
+
 
     std::thread log_thread_;
 

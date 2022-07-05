@@ -13,10 +13,11 @@
 class FileLock {
 private:
     int fd;
+    const std::string file_name_;
 
 public:
 
-    explicit FileLock(const std::string &file_name) : fd(open(file_name.c_str(), O_CREAT)) {
+    explicit FileLock(const std::string &file_name) : fd(open(file_name.c_str(), O_CREAT)),file_name_(file_name) {
 
         int res = flock(fd, LOCK_EX);
 

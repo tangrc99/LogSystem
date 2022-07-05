@@ -14,7 +14,7 @@ add_executable(Mongo
         LogSender.cpp LogSender.h
         LockFreeQueue.cpp LockFreeQueue.h
         FileLock.h
-        arena.h arena.cc Slice.h)
+        arena.h arena.cc Slice.h LogInformation.h LogSystem.cpp LogSystem.h)
 
 target_link_libraries(Mongo mongocxx bsoncxx)
 
